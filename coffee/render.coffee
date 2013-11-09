@@ -1,7 +1,7 @@
 snap = Snap("#overlay")
 
 
-window.display = (HistoryItem) -> 
+window.display = (HistoryItem) ->
 
 	unless HistoryItem.id is id
 
@@ -10,9 +10,7 @@ window.display = (HistoryItem) ->
 		$("#referrer").parent()
 
 
-
-
-	else 
+	else
 		console.log "the id was #{id}"
 		console.log "the HistoryItem id was #{HistoryItem.id}"
 		console.log "so render failed"
