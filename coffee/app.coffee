@@ -101,7 +101,7 @@ window.CreateVector = (vertex, top) ->
 		$vector.append(BuildDiv(vertex.time, vertex.title, vertex.url, vertex.id))
 		for child in vertex.children when graph[child]?
 			if vertex.id?
-				buildArrow(vertex.id, child)
+				buildArrow(vertex.id, child, left)
 
 		if graph[vertex.parent]? and vertex.parent isnt '0'
 			recurse(graph[vertex.parent])
@@ -117,12 +117,12 @@ window.BuildDiv = (bottomTime, title, url, id) ->
 		$a = $("<a/>", href: url).append($div)
 	
 
-buildArrow = (from, to) -> 
+buildArrow = (from, to, left) -> 
 
 	f = $("##{from}").position()
-	t = $("##{to}").position
-	console.log "f", f
-	console.log "t", t
+	t = $("##{to}").position()
 
-	overlay.path("M#{f.left},#{f.top}L#{t.left},#{t.top}")
-
+	if f? and t? and false
+		p = overlay.path("M#{f.left + left + 100},#{f.top}L#{t.left + left + 100},#{t.top}")
+		p.attr
+			"arrow-end":"classic-wide-long"
