@@ -1,13 +1,13 @@
 snap = Snap("#overlay")
 
 
-window.display = (HistoryItem, id, referrer) -> 
+window.display = (HistoryItem) -> 
 
 	unless HistoryItem.id is id
 
 		$("<div/>", class: 'link', id: id)
 
-		$("#referrer").parent().
+		$("#referrer").parent()
 
 
 
