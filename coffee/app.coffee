@@ -1,5 +1,6 @@
 all = {text: ""}
 graph = {}
+vectors = []
 
 $(document).ready -> 
 	
@@ -36,18 +37,23 @@ $(document).ready ->
 	)
 
 
-CreateVector = (vertex) -> 
-
-	# create a 
+window.CreateVector = (vertex) -> 
 	
+	left = vectors.length * 220;
+	$vector = $("<div/>", class: 'vector', style:"left: "+left+"px; top: 0;")
+	$("#overlay").append($vector)
 
-window.BuildRectangle = (bottomTime, topTime, title, url) -> 
+	vectors.push($vector)
 
-	window.paper.circle(150, 150, 100)
+
 
 
 
 ###
+
+window.BuildRectangle = (bottomTime, topTime, title, url) -> 
+
+	window.paper.circle(150, 150, 100)
 
 	HistoryItem
 
