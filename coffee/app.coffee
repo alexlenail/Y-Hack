@@ -6,7 +6,6 @@ canvas = {}
 window.getCanvas = () -> return canvas
 
 $(document).ready -> 
-	
 	overlay = $("#overlay")
 	canvas = Raphael(overlay.get(0))
 
@@ -14,20 +13,27 @@ $(document).ready ->
 	chrome.history.search(all, (history) ->
 
 		for link in history
+			console.log "Link loop"
 			chrome.history.getVisits({'url': link.url}, (visits) ->
-
+				console.log visits
 				for visit in visits
+					console.log visit.referringVisitId
 					graph[visit.visitId] = {
 						url: link.url
 						title: link.title
 						time: link.lastVisitTime
 						parent: visit.referringVisitId
 						children: []
-					}		
+					}
+				console.log "after visit loop"
+				console.log graph
 
-				for vertex in graph
+				#Adding children to graph
+				for key, vertex of graph when vertex.parent != '0'
+					console.log vertex
 					graph[vertex.parent].children.push(vertex.id)
 
+				console.log "After graph push"
 				return graph
 
 			).then (graph) -> 
