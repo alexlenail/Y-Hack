@@ -1,4 +1,4 @@
-
+displayed = []
 
 
 $(document).ready -> 
@@ -7,25 +7,26 @@ $(document).ready ->
 
 		for result in results
 
-			if visible(result.id)
+			if visible(result.id) or isOpen(result)
 
 				chrome.history.getVisits( 'url': result.url, (item) ->   # item is a VisitItem. See below. 
 					
 					display(result, item.id, item.referringVisitId) 	
 
-				)
-
-
-			
+				)	
 
 	)
 
-visible = (id) -> 
 
-	
-
+visible = (id) -> displayed.indexOf(id) isnt -1
+isOpen = (id) -> true # fix this
 
 display = (HistoryItem, id, referrer) -> 
+
+	unless HistoryItem.id is id
+
+		$("<div/>", class: 'link', id: id)
+
 
 
 
