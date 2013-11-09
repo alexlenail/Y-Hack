@@ -6,7 +6,7 @@
 	"browser_action": {
 		"default_title": "That's the tool tip",
 		"default_popup": "popup.html",
-    "default_icon": "histpic.png"
+    "default_icon": "icon.png"
 	},
   "background": {
     "scripts": ["background.js"]
