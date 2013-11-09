@@ -74,12 +74,13 @@
     return vectors.push($vector);
   };
 
+  window.BuildRectangle = function(bottomTime, topTime, title, url) {
+    var paper;
+    paper = Snap("#overlay");
+    return paper.circle(150, 150, 100);
+  };
+
   /*
-  
-  window.BuildRectangle = (bottomTime, topTime, title, url) -> 
-  
-  	window.paper.circle(150, 150, 100)
-  
   	HistoryItem
   
   	id ( string )

@@ -4,6 +4,7 @@ vectors = []
 
 $(document).ready -> 
 	
+
 	chrome.history.search(all, (history) ->
 
 		for link in history
@@ -47,14 +48,17 @@ window.CreateVector = (vertex) ->
 
 
 
+window.BuildRectangle = (bottomTime, topTime, title, url) -> 
+
+	paper = Snap("#overlay")
+
+	paper.circle(150, 150, 100);
+
+
+
 
 
 ###
-
-window.BuildRectangle = (bottomTime, topTime, title, url) -> 
-
-	window.paper.circle(150, 150, 100)
-
 	HistoryItem
 
 	id ( string )
