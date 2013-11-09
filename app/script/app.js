@@ -115,7 +115,7 @@
         child = _ref[_i];
         if (graph[child] != null) {
           if (vertex.id != null) {
-            buildArrow(vertex.id, child);
+            buildArrow(vertex.id, child, left);
           }
         }
       }
@@ -141,13 +141,16 @@
     }
   };
 
-  buildArrow = function(from, to) {
-    var f, t;
+  buildArrow = function(from, to, left) {
+    var f, p, t;
     f = $("#" + from).position();
-    t = $("#" + to).position;
-    console.log("f", f);
-    console.log("t", t);
-    return overlay.path("M" + f.left + "," + f.top + "L" + t.left + "," + t.top);
+    t = $("#" + to).position();
+    if ((f != null) && (t != null) && false) {
+      p = overlay.path("M" + (f.left + left + 100) + "," + f.top + "L" + (t.left + left + 100) + "," + t.top);
+      return p.attr({
+        "arrow-end": "classic-wide-long"
+      });
+    }
   };
 
 }).call(this);
