@@ -7,8 +7,10 @@
 		"default_title": "That's the tool tip",
 		"default_popup": "popup.html"
 	},
+  "background": "background.html",
 	"permissions": [
-		"history"
+    "tabs",
+		"history",
 		"webNavigation"
 	]
 
