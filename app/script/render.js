@@ -5,18 +5,9 @@
   snap = Snap("#overlay");
 
   window.display = function(HistoryItem, pointsTo) {
-    if (HistoryItem.id !== id) {
-      $("<div/>", {
-        "class": 'link',
-        id: id
-      });
-      return $("#referrer").parent();
-    } else {
-      console.log("the id was " + id);
-      console.log("the HistoryItem id was " + HistoryItem.id);
-      console.log("so render failed");
-      return console.log("");
-    }
+    console.log("the id was " + id);
+    console.log("the HistoryItem id was " + HistoryItem.id);
+    return console.log("");
   };
 
   /*
