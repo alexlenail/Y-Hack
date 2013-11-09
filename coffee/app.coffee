@@ -18,7 +18,7 @@ $(document).ready ->
 		console.log graph
 
 	initHistGraph = (history) ->
-
+		graph = {}
 		makeGraph = (visits, link) ->
 			for visit in visits
 				graph[visit.visitId] = {
@@ -29,15 +29,17 @@ $(document).ready ->
 					children: []
 				}
 
-		visit = () ->
-			for link in history
+		visit = (history) ->
+			async.map(history, ((link, callback) ->
 				chrome.history.getVisits({'url': link.url}, (visits) ->
 					makeGraph(visits, link)
-				)
+					callback(null, true)
+				)),
+				(err, results) -> draw graph
+			)
+
+		visit(history)
 		
-		visit()
-		console.log "end graph: "
-		console.log graph
 
 	chrome.history.search(all, (history) ->
 		initHistGraph history
