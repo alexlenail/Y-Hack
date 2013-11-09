@@ -63,10 +63,12 @@ window.CreateVector = (vertex) ->
 	$("#overlay").append($vector)
 	
 	recurse = (vertex) -> 
+		vertex.id = key for key, v of graph when v is vertex
 
 		$vector.append(BuildDiv(vertex.time, vertex.title, vertex.url, vertex.id))
-		$parent = $("##{vertex.id}")
-		buildArrow($parent, $child = $("##{graph[child]}")) for child in vertex.children
+		for child in vertex.children when graph[child]?
+			if vertex.id?
+				buildArrow(vertex.id, child)
 
 		if graph[vertex.parent]? and vertex.parent isnt '0'
 			recurse(graph[vertex.parent])
@@ -78,18 +80,17 @@ window.CreateVector = (vertex) ->
 
 window.BuildDiv = (bottomTime, title, url, id) -> 
 
-	console.log "title:", title
-
-	$div = $("<div/>", class: "fading link", id: id, text: title)
-	$a = $("<a/>", href: url).append($div)
+	if id?
+		$div = $("<div/>", class: "fading link", id: id, text: title)
+		$a = $("<a/>", href: url).append($div)
 	
 
 buildArrow = (from, to) -> 
 
-	console.log "from", from
-	console.log "to", to
+	f = $("##{from}").position()
+	t = $("##{to}").position
+	console.log "f", f
+	console.log "t", t
 
-	raph = window.getOverlay()
-
-	raph.path("M#{from.position().left},#{from.position().top}L#{to.position().left},#{to.position().top}")
+	overlay.path("M#{f.left},#{f.top}L#{t.left},#{t.top}")
 

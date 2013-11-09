@@ -102,13 +102,22 @@
     });
     $("#overlay").append($vector);
     recurse = function(vertex) {
-      var $child, $parent, child, _i, _len, _ref;
+      var child, key, v, _i, _len, _ref;
+      for (key in graph) {
+        v = graph[key];
+        if (v === vertex) {
+          vertex.id = key;
+        }
+      }
       $vector.append(BuildDiv(vertex.time, vertex.title, vertex.url, vertex.id));
-      $parent = $("#" + vertex.id);
       _ref = vertex.children;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         child = _ref[_i];
-        buildArrow($parent, $child = $("#" + graph[child]));
+        if (graph[child] != null) {
+          if (vertex.id != null) {
+            buildArrow(vertex.id, child);
+          }
+        }
       }
       if ((graph[vertex.parent] != null) && vertex.parent !== '0') {
         return recurse(graph[vertex.parent]);
@@ -120,23 +129,25 @@
 
   window.BuildDiv = function(bottomTime, title, url, id) {
     var $a, $div;
-    console.log("title:", title);
-    $div = $("<div/>", {
-      "class": "fading link",
-      id: id,
-      text: title
-    });
-    return $a = $("<a/>", {
-      href: url
-    }).append($div);
+    if (id != null) {
+      $div = $("<div/>", {
+        "class": "fading link",
+        id: id,
+        text: title
+      });
+      return $a = $("<a/>", {
+        href: url
+      }).append($div);
+    }
   };
 
   buildArrow = function(from, to) {
-    var raph;
-    console.log("from", from);
-    console.log("to", to);
-    raph = window.getOverlay();
-    return raph.path("M" + (from.position().left) + "," + (from.position().top) + "L" + (to.position().left) + "," + (to.position().top));
+    var f, t;
+    f = $("#" + from).position();
+    t = $("#" + to).position;
+    console.log("f", f);
+    console.log("t", t);
+    return overlay.path("M" + f.left + "," + f.top + "L" + t.left + "," + t.top);
   };
 
 }).call(this);
