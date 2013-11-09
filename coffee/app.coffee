@@ -6,7 +6,8 @@ $(document).ready ->
 	chrome.history.search( text: "", (results) ->    # results is an array of HistoryItems, See below
 
 		for result in results
-			# if it is currently displayed
+
+			if visible(result.id)
 
 				chrome.history.getVisits( 'url': result.url, (item) ->   # item is a VisitItem. See below. 
 					
@@ -19,9 +20,14 @@ $(document).ready ->
 
 	)
 
-display = (HistoryItem, id, referrer) -> 
+visible = (id) -> 
 
 	
+
+
+display = (HistoryItem, id, referrer) -> 
+
+
 
 
 ###
