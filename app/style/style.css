@@ -6,6 +6,14 @@ body {
 
 }
 
+a {
+
+	text-decoration: none;
+	color: black;
+
+
+}
+
 #overlay {
 	
 	width: 100%;
@@ -26,11 +34,29 @@ body {
 .link {
 
 	height: 100px;
+	margin-top: 5px;
 	background-color: lightblue;
 
 }
 
 
+
+
+
+
+
+
+
+
+.fading {
+
+        opacity: 0.8;
+        cursor: pointer;
+        transition: opacity .2s ease-in-out;
+        -moz-transition: opacity .2s ease-in-out;
+        -webkit-transition: opacity .2s ease-in-out;
+
+} .fading:hover { opacity: 1.0; }
 
 
 

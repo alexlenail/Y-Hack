@@ -9,15 +9,20 @@ $(document).ready ->
 	overlay = $("#overlay")
 	canvas = Raphael(overlay.get(0))
 
-	graph = {}
-	draw = (graph) ->
-		console.log "Draw the graph"
-		console.log graph
+	build = (graph) ->
+		graph[vertex.parent].children.push(id) for id, vertex in graph
 
-	addVector = (graph) ->
-		console.log graph
+		chrome.tabs.query({}, (tabs) -> 
+			for tab in tabs
+				current = {time: 0}
+				for key, vertex of graph when vertex.url is tab.url
+					if vertex.time > current["time"]
+						current = vertex 
 
-	initHistGraph = (history) ->
+				CreateVector(current)
+		)
+
+	initialize = (history) ->
 		graph = {}
 		makeGraph = (visits, link) ->
 			for visit in visits
@@ -35,30 +40,20 @@ $(document).ready ->
 					makeGraph(visits, link)
 					callback(null, true)
 				)),
-				(err, results) -> draw graph
+				(err, results) -> build graph
 			)
 
 		visit(history)
 		
 
 	chrome.history.search(all, (history) ->
-		initHistGraph history
+		initialize history
 	)
 
-	current = {time: 0}
-
-	chrome.tabs.query({}, (tabs) -> 
-		for tab in tabs
-			for vertex in graph when vertex.url is tab.url
-				if vertex.time > current_newest.time
-					current = vertex 
-			
-			CreateVector(current)
-
-	)
 
 
 window.CreateVector = (vertex) -> 
+
 	
 	left = vectors.length * 220;
 	$vector = $("<div/>", class: 'vector', style:"left: "+left+"px; top: 0;")
@@ -67,7 +62,9 @@ window.CreateVector = (vertex) ->
 	recurse = (vertex) -> 
 
 		$vector.append(BuildDiv(vertex.time, vertex.title, vertex.url))
-		recurse(graph[vertex.parent]) if vertex.parent?
+		buildArrow($vertex, $("##{graph[dest]}")) for dest in vertex.children
+		if graph[vertex.parent]? and vertex.parent isnt '0'
+			recurse(graph[vertex.parent])
 	
 	recurse(vertex)
 
@@ -76,41 +73,11 @@ window.CreateVector = (vertex) ->
 
 window.BuildDiv = (bottomTime, title, url) -> 
 
-	return $("<div/>", class: "link", text: "#{title}")
+	$div = $("<div/>", class: "fading link", id: url, text: title)
+	$a = $("<a/>", href: url).append($div)
+	
+
+buildArrow = (from, to) -> 
 
 	
 
-buildArrow = (from, to) ->
-
-	
-
-
-
-###
-	HistoryItem
-
-	id ( string )
-		The unique identifier for the item.
-	url ( optional string )
-		The URL navigated to by a user.
-	title ( optional string )
-		The title of the page when it was last loaded.
-	lastVisitTime ( optional double )
-		When this page was last loaded, represented in milliseconds since the epoch.
-	visitCount ( optional integer )
-		The number of times the user has navigated to this page.
-	typedCount ( optional integer )
-		The number of times the user has navigated to this page by typing in the address.
-
-	VisitItem
-
-	id ( string )
-		The unique identifier for the item.
-	visitId ( string )
-		The unique identifier for this visit.
-	visitTime ( optional double )
-		When this visit occurred, represented in milliseconds since the epoch.
-	referringVisitId ( string )
-		The visit ID of the referrer.
-
-###
