@@ -9,7 +9,7 @@
     "default_icon": "icon.png"
 	},
   "background": {
-    "page": "background.html"
+    "scripts": ["script/background.js"]
   },
 	"permissions": [
     "tabs",
