@@ -1,9 +1,11 @@
-displayed = []
+window.displayed = []
 
 
 $(document).ready -> 
 	
 	chrome.history.search( text: "", (results) ->    # results is an array of HistoryItems, See below
+
+		# display the tabs that are currently open
 
 		for result in results
 
@@ -18,8 +20,7 @@ $(document).ready ->
 	)
 
 
-visible = (id) -> displayed.indexOf(id) isnt -1
-isOpen = (id) -> true # fix this
+visible = (id) -> window.displayed.indexOf(id) isnt -1
 
 
 

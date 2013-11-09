@@ -1,11 +1,23 @@
 
+snap = Snap(".layer")
+
+
 window.display = (HistoryItem, id, referrer) -> 
 
 	unless HistoryItem.id is id
 
 		$("<div/>", class: 'link', id: id)
 
+		$("#referrer").parent().
 
+
+
+
+	else 
+		console.log "the id was #{id}"
+		console.log "the HistoryItem id was #{HistoryItem.id}"
+		console.log "so render failed"
+		console.log ""
 
 
 ###
