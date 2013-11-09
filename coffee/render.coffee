@@ -1,25 +1,10 @@
-displayed = []
 
+window.display = (HistoryItem, id, referrer) -> 
 
-$(document).ready -> 
-	
-	chrome.history.search( text: "", (results) ->    # results is an array of HistoryItems, See below
+	unless HistoryItem.id is id
 
-		for result in results
+		$("<div/>", class: 'link', id: id)
 
-			if visible(result.id) or isOpen(result)
-
-				chrome.history.getVisits( 'url': result.url, (item) ->   # item is a VisitItem. See below. 
-					
-					window.display(result, item.id, item.referringVisitId) 	
-
-				)	
-
-	)
-
-
-visible = (id) -> displayed.indexOf(id) isnt -1
-isOpen = (id) -> true # fix this
 
 
 
@@ -52,3 +37,4 @@ isOpen = (id) -> true # fix this
 		The visit ID of the referrer.
 
 ###
+
