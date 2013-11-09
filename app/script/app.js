@@ -5,7 +5,7 @@
   window.displayed = [];
 
   $(document).ready(function() {
-    return chrome.history.search({}, function(results) {
+    return chrome.history.search({text: ''}, function(results) {
       return chrome.tabs.query({}, function(tabs) {
         var index, tab, _i, _len, _results;
         _results = [];
