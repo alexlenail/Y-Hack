@@ -1,33 +1,26 @@
-window.displayed = []
+window.displayed = {}
 
 
 $(document).ready -> 
 	
-	chrome.history.search({}, (results) ->    # results is an array of HistoryItems, See below
+	chrome.history.search({}, (history) ->    # results is an array of HistoryItems, See below
 
 		chrome.tabs.query({}, (tabs) ->
 
-			for tab in tabs
+			for tab in tabs when history.indexOf(tab.id) isnt -1
 
-				index = results.indexOf(tab.id)
-				result = results[index]
-				if index is -1
-					console.log "FAILURE"
-				else
-					window.display(result)
-					window.displayed.push(result.id)
+				link = history."#{tab.id}"
+				window.display(link)
+				window.displayed."#{link.id}" = true
 
-					chrome.history.getVisits( 'url': result.url, (visits) ->   # item is a VisitItem. See below. 
+				chrome.history.getVisits({'url': link.url}, (visits) ->   # item is a VisitItem. See below. 
 
-						for visit in visits
+					for visit in visits when visit.visitId is link.id
 
-							if visit.id is 
+						window.display(history."#{visit.referringVisitId}", link.id)
+						window.displayed."#{visit.referringVisitId}" = true
 
-								referrer = results[]
-
-								window.display(result, item.id, item.referringVisitId) 	
-
-					)
+				)
 
 		)
 
@@ -35,7 +28,6 @@ $(document).ready ->
 
 
 
-visible = (id) -> window.displayed.indexOf(id) isnt -1
 
 
 

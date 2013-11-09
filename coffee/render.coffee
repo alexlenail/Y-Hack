@@ -7,7 +7,7 @@ window.display = (HistoryItem, id, referrer) ->
 
 		$("<div/>", class: 'link', id: id)
 
-		$("#referrer").parent().
+		$("#referrer").parent()
 
 
 
