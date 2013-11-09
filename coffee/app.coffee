@@ -1,10 +1,16 @@
 all = {text: ""}
 graph = {}
 vectors = []
+canvas = {}
+
+window.getCanvas = () -> return canvas
 
 $(document).ready -> 
 	
+	overlay = $("#overlay")
+	canvas = Raphael(overlay.get(0))
 
+	graph = []
 	chrome.history.search(all, (history) ->
 
 		for link in history
@@ -17,19 +23,26 @@ $(document).ready ->
 						time: link.lastVisitTime
 						parent: visit.referringVisitId
 						children: []
-					}
-			)
+					}		
 
-		for vertex in graph
-			graph[vertex.parent].children.push(vertex.id)
+				for vertex in graph
+					graph[vertex.parent].children.push(vertex.id)
+
+				return graph
+
+			).then (graph) -> 
+				console.log graph
+				return graph
 
 	)
+
+
 
 	current = {time: 0}
 
 	chrome.tabs.query({}, (tabs) -> 
 		for tab in tabs
-			for vertex in graph	when vertex.url is tab.url
+			for vertex in graph when vertex.url is tab.url
 				if vertex.time > current_newest.time
 					current = vertex 
 			
@@ -43,16 +56,24 @@ window.CreateVector = (vertex) ->
 	left = vectors.length * 220;
 	$vector = $("<div/>", class: 'vector', style:"left: "+left+"px; top: 0;")
 	$("#overlay").append($vector)
+	
+	recurse = (vertex) -> 
+
+		$vector.append(BuildDiv(vertex.time, vertex.title, vertex.url))
+		recurse(graph[vertex.parent]) if vertex.parent?
+	
+	recurse(vertex)
 
 	vectors.push($vector)
 
 
+window.BuildDiv = (bottomTime, title, url) -> 
 
-window.BuildRectangle = (bottomTime, topTime, title, url) -> 
+#	console.log graph
 
-	paper = Snap("#overlay")
+	$rect = $("<div/>", class: "link", text: "#{title}")
 
-	paper.circle(150, 150, 100);
+	return $rect
 
 
 
