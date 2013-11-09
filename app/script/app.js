@@ -39,7 +39,7 @@
             if (vertex.url === tab.url) {
               if (vertex.time > current["time"]) {
                 current = vertex;
-                current.key = key;
+                current.id = key;
               }
             }
           }
@@ -95,7 +95,7 @@
     $("#overlay").append($vector);
     recurse = function(vertex) {
       var child, _i, _len, _ref;
-      $vector.append(BuildDiv(vertex.time, vertex.title, vertex.url));
+      $vector.append(BuildDiv(vertex.time, vertex.title, vertex.url, vertex.id));
       _ref = vertex.children;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         child = _ref[_i];
@@ -109,11 +109,11 @@
     return vectors.push($vector);
   };
 
-  window.BuildDiv = function(bottomTime, title, url) {
+  window.BuildDiv = function(bottomTime, title, url, id) {
     var $a, $div;
     $div = $("<div/>", {
       "class": "fading link",
-      id: url,
+      id: id,
       text: title
     });
     return $a = $("<a/>", {

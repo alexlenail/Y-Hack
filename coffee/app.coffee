@@ -18,7 +18,7 @@ $(document).ready ->
 				for key, vertex of graph when vertex.url is tab.url
 					if vertex.time > current["time"]
 						current = vertex
-						current.key = key
+						current.id = key
 
 				CreateVector(current)
 		)
@@ -61,7 +61,7 @@ window.CreateVector = (vertex) ->
 	
 	recurse = (vertex) -> 
 
-		$vector.append(BuildDiv(vertex.time, vertex.title, vertex.url))
+		$vector.append(BuildDiv(vertex.time, vertex.title, vertex.url, vertex.id))
 		buildArrow($vertex, $("##{graph[child]}")) for child in vertex.children
 		if graph[vertex.parent]? and vertex.parent isnt '0'
 			recurse(graph[vertex.parent])
@@ -71,9 +71,9 @@ window.CreateVector = (vertex) ->
 	vectors.push($vector)
 
 
-window.BuildDiv = (bottomTime, title, url) -> 
+window.BuildDiv = (bottomTime, title, url, id) -> 
 
-	$div = $("<div/>", class: "fading link", id: url, text: title)
+	$div = $("<div/>", class: "fading link", id: id, text: title)
 	$a = $("<a/>", href: url).append($div)
 	
 
