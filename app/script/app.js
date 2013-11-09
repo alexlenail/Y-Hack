@@ -17,50 +17,65 @@
   };
 
   $(document).ready(function() {
-    var current, overlay;
+    var addVector, current, draw, initHistGraph, overlay;
     overlay = $("#overlay");
     canvas = Raphael(overlay.get(0));
-    graph = [];
+    graph = {};
+    draw = function(graph) {
+      console.log("Draw the graph");
+      return console.log(graph);
+    };
+    addVector = function(graph) {
+      return console.log(graph);
+    };
+    initHistGraph = function(history) {
+      var makeGraph, visit;
+      makeGraph = function(visits, link) {
+        var visit, _i, _len;
+        for (_i = 0, _len = visits.length; _i < _len; _i++) {
+          visit = visits[_i];
+          graph[visit.visitId] = {
+            url: link.url,
+            title: link.title,
+            time: link.lastVisitTime,
+            parent: visit.referringVisitId,
+            children: []
+          };
+        }
+        /*Adding children to graph
+        			for key, vertex of graph when vertex.parent != '0'
+        				console.log "   Before: Key V Loop"
+        				console.log key
+        				console.log vertex
+        				graph[vertex.parent].children.push(key)
+        				console.log "   after: Key V Loop"
+        			
+        			console.log  "after again again again?"
+        */
+
+        console.log("We made dis graph: ");
+        return console.log(graph);
+      };
+      visit = function() {
+        var link, _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = history.length; _i < _len; _i++) {
+          link = history[_i];
+          _results.push(chrome.history.getVisits({
+            'url': link.url
+          }, function(visits) {
+            return makeGraph(visits, link);
+          }));
+        }
+        return _results;
+      };
+      visit();
+      console.log("end graph: ");
+      console.log(graph);
+      return anon();
+    };
     chrome.history.search(all, function(history) {
-      var link, _i, _len, _results;
-      _results = [];
-      for (_i = 0, _len = history.length; _i < _len; _i++) {
-        link = history[_i];
-        console.log("Link loop");
-        _results.push(chrome.history.getVisits({
-          'url': link.url
-        }, function(visits) {
-          var key, vertex, visit, _j, _len1;
-          console.log(visits);
-          for (_j = 0, _len1 = visits.length; _j < _len1; _j++) {
-            visit = visits[_j];
-            console.log(visit.referringVisitId);
-            graph[visit.visitId] = {
-              url: link.url,
-              title: link.title,
-              time: link.lastVisitTime,
-              parent: visit.referringVisitId,
-              children: []
-            };
-          }
-          console.log("after visit loop");
-          console.log(graph);
-          for (key in graph) {
-            vertex = graph[key];
-            if (!(vertex.parent !== '0')) {
-              continue;
-            }
-            console.log(vertex);
-            graph[vertex.parent].children.push(vertex.id);
-          }
-          console.log("After graph push");
-          return graph;
-        }).then(function(graph) {
-          console.log(graph);
-          return graph;
-        }));
-      }
-      return _results;
+      return initHistGraph(history);
     });
     current = {
       time: 0
