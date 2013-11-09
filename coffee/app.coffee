@@ -13,7 +13,7 @@ $(document).ready ->
 	chrome.history.search(all, (history) ->
 
 		for link in history
-			console.log "Link loop"
+			console.log "Visits"
 			chrome.history.getVisits({'url': link.url}, (visits) ->
 				console.log visits
 				for visit in visits
@@ -75,13 +75,13 @@ window.CreateVector = (vertex) ->
 
 window.BuildDiv = (bottomTime, title, url) -> 
 
-#	console.log graph
+	return $("<div/>", class: "link", text: "#{title}")
 
-	$rect = $("<div/>", class: "link", text: "#{title}")
+	
 
-	return $rect
+buildArrow = (from, to) ->
 
-
+	
 
 
 
