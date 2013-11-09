@@ -12,15 +12,10 @@ $(document).ready ->
 	build = (graph) ->
 
 		for id, vertex of graph when graph["#{vertex.parent}"]? and vertex.parent isnt '0'
-
 			graph["#{vertex.parent}"].children.push(id)
-
-
-		console.log graph
 
 		chrome.tabs.query({}, (tabs) -> 
 			for tab in tabs
-				console.log tab
 				current = {time: 0}
 				for key, vertex of graph when vertex.url is tab.url
 					if vertex.time > current["time"]
@@ -28,7 +23,6 @@ $(document).ready ->
 						current.id = key
 						current.title = tab.title
 
-				console.log "first-title:", current.title
 				CreateVector(current)
 		)
 
@@ -56,22 +50,24 @@ $(document).ready ->
 		visit(history)
 		
 
-	chrome.history.search(all, (history) ->
-		initialize history
-	)
-
+	chrome.history.search(all, (history) -> initialize history)
 
 
 window.CreateVector = (vertex) -> 
 
-	left = vectors.length * 212;
-	$vector = $("<div/>", class: 'vector', style:"left: "+left+"px; top:60px;")
+	left = vectors.length * 211;
+	
+	if $(document).width() < left + 211 then $("header").width("#{left + 211}px") else $("header").width("100%")
+	
+	$vector = $("<div/>", class: 'vector', style:"left: "+left+"px; top:54px;")
 	$("#overlay").append($vector)
 	
 	recurse = (vertex) -> 
 
 		$vector.append(BuildDiv(vertex.time, vertex.title, vertex.url, vertex.id))
-#		buildArrow($("##{vertex.id}"), $("##{graph[child]}")) for child in vertex.children
+		$parent = $("##{vertex.id}")
+		buildArrow($parent, $child = $("##{graph[child]}")) for child in vertex.children
+
 		if graph[vertex.parent]? and vertex.parent isnt '0'
 			recurse(graph[vertex.parent])
 	
@@ -90,8 +86,8 @@ window.BuildDiv = (bottomTime, title, url, id) ->
 
 buildArrow = (from, to) -> 
 
-	console.log from
-	console.log to
+	console.log "from", from
+	console.log "to", to
 
 	raph = window.getOverlay()
 

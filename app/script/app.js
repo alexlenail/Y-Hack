@@ -28,13 +28,11 @@
           graph["" + vertex.parent].children.push(id);
         }
       }
-      console.log(graph);
       return chrome.tabs.query({}, function(tabs) {
         var current, key, tab, _i, _len, _results;
         _results = [];
         for (_i = 0, _len = tabs.length; _i < _len; _i++) {
           tab = tabs[_i];
-          console.log(tab);
           current = {
             time: 0
           };
@@ -48,7 +46,6 @@
               }
             }
           }
-          console.log("first-title:", current.title);
           _results.push(CreateVector(current));
         }
         return _results;
@@ -93,14 +90,26 @@
 
   window.CreateVector = function(vertex) {
     var $vector, left, recurse;
-    left = vectors.length * 212;
+    left = vectors.length * 211;
+    if ($(document).width() < left + 211) {
+      $("header").width("" + (left + 211) + "px");
+    } else {
+      $("header").width("100%");
+    }
     $vector = $("<div/>", {
       "class": 'vector',
-      style: "left: " + left + "px; top:60px;"
+      style: "left: " + left + "px; top:54px;"
     });
     $("#overlay").append($vector);
     recurse = function(vertex) {
+      var $child, $parent, child, _i, _len, _ref;
       $vector.append(BuildDiv(vertex.time, vertex.title, vertex.url, vertex.id));
+      $parent = $("#" + vertex.id);
+      _ref = vertex.children;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        child = _ref[_i];
+        buildArrow($parent, $child = $("#" + graph[child]));
+      }
       if ((graph[vertex.parent] != null) && vertex.parent !== '0') {
         return recurse(graph[vertex.parent]);
       }
@@ -124,8 +133,8 @@
 
   buildArrow = function(from, to) {
     var raph;
-    console.log(from);
-    console.log(to);
+    console.log("from", from);
+    console.log("to", to);
     raph = window.getOverlay();
     return raph.path("M" + (from.position().left) + "," + (from.position().top) + "L" + (to.position().left) + "," + (to.position().top));
   };
