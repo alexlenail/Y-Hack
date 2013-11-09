@@ -4,7 +4,7 @@
 
   snap = Snap("#overlay");
 
-  window.display = function(HistoryItem) {
+  window.display = function(HistoryItem, pointsTo) {
     if (HistoryItem.id !== id) {
       $("<div/>", {
         "class": 'link',
