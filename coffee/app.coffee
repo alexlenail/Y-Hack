@@ -79,29 +79,30 @@ $(document).ready ->
 		visit(history)
 		
 
-	chrome.history.search(all, (history) ->
-		initialize history
-	)
-
+	chrome.history.search(all, (history) -> initialize history)
 
 
 window.CreateVector = (vertex, top) -> 
 
-	left = vectors.length * 212;
+	left = vectors.length * 211;
 	console.log top
 	if top != 60
 		top  = 60 + Math.pow((maxTime - vertex.time), 1/3)
 	console.log top
 
+	if $(document).width() < left + 211 then $("header").width("#{left + 211}px") else $("header").width("100%")
+	
 	$vector = $("<div/>", class: 'vector', style:"left: "+left+"px; top:"+top+"px;")
 	$("#overlay").append($vector)
 	
-	recurse = (vertex) ->
-
-		$vector.append(BuildDiv(vertex.time, vertex.title, vertex.url, vertex.id))
-#		buildArrow($("##{vertex.id}"), $("##{graph[child]}")) for child in vertex.children
+	recurse = (vertex) -> 
+		vertex.id = key for key, v of graph when v is vertex
 		displayed: true
-		
+		$vector.append(BuildDiv(vertex.time, vertex.title, vertex.url, vertex.id))
+		for child in vertex.children when graph[child]?
+			if vertex.id?
+				buildArrow(vertex.id, child)
+
 		if graph[vertex.parent]? and vertex.parent isnt '0'
 			recurse(graph[vertex.parent])
 	
@@ -111,17 +112,17 @@ window.CreateVector = (vertex, top) ->
 
 window.BuildDiv = (bottomTime, title, url, id) -> 
 
-
-	$div = $("<div/>", class: "fading link", id: id, text: title)
-	$a = $("<a/>", href: url).append($div)
+	if id?
+		$div = $("<div/>", class: "fading link", id: id, text: title)
+		$a = $("<a/>", href: url).append($div)
 	
 
 buildArrow = (from, to) -> 
 
-	console.log from
-	console.log to
+	f = $("##{from}").position()
+	t = $("##{to}").position
+	console.log "f", f
+	console.log "t", t
 
-	raph = window.getOverlay()
-
-	raph.path("M#{from.position().left},#{from.position().top}L#{to.position().left},#{to.position().top}")
+	overlay.path("M#{f.left},#{f.top}L#{t.left},#{t.top}")
 
