@@ -6,9 +6,11 @@
 	"browser_action": {
 		"default_title": "That's the tool tip",
 		"default_popup": "popup.html",
-    "default_icon": "history.gif"
+    "default_icon": "icon.png"
 	},
-  "background": "background.html",
+  "background": {
+    "scripts": ["background.js"]
+  },
 	"permissions": [
     "tabs",
 		"history",
