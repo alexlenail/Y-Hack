@@ -1,22 +1,32 @@
-snap = Snap("#overlay")
+
+$(document).ready -> window.paper = Snap("#overlay")
 
 
-window.display = (HistoryItem, pointsTo) -> 
+window.display = (HistoryItem, pointsTo) -> null
 
-	
+#	if window.displayed[HistoryItem.id] # then make sure I point to whatever pointsTo is
 
-	$("<div/>", class: 'link', id: id)
-
-	$("#referrer").parent()
+#	else null
 
 
 
 
-	else 
-		console.log "the id was #{id}"
-		console.log "the HistoryItem id was #{HistoryItem.id}"
-		console.log "so render failed"
-		console.log ""
+
+###
+	console.log "the id was #{id}"
+	console.log "the HistoryItem id was #{HistoryItem.id}"
+#	console.log "so render failed"
+	console.log ""
+
+###
+
+window.BuildRectangle = (bottomTime, topTime, title, url) -> 
+
+	window.paper.circle(150, 150, 100)
+
+
+
+BuildLink = () -> 
 
 
 ###

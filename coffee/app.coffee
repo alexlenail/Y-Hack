@@ -1,33 +1,49 @@
-window.displayed = {}
-
+all = {text: ""}
+graph = {}
 
 $(document).ready -> 
 	
-	chrome.history.search({}, (history) ->    # results is an array of HistoryItems, See below
+	chrome.history.search(all, (history) ->
 
-		chrome.tabs.query({}, (tabs) ->
+		for link in history
+			chrome.history.getVisits({'url': link.url}, (visits) ->
 
-			for tab in tabs when history.indexOf(tab.id) isnt -1
+				for visit in visits
+					graph[visit.visitId] = {
+						url: link.url
+						title: link.title
+						time: link.lastVisitTime
+						parent: visit.referringVisitId
+						children: []
+					}
+			)
 
-				link = history."#{tab.id}"
-				window.display(link)
-				window.displayed."#{link.id}" = true
+		for vertex in graph
+			graph[vertex.parent].children.push(vertex.id)
 
-				chrome.history.getVisits({'url': link.url}, (visits) ->   # item is a VisitItem. See below. 
+	)
 
-					for visit in visits when visit.visitId is link.id
+	current = {time: 0}
 
-						window.display(history."#{visit.referringVisitId}", link.id)
-						window.displayed."#{visit.referringVisitId}" = true
-
-				)
-
-		)
+	chrome.tabs.query({}, (tabs) -> 
+		for tab in tabs
+			for vertex in graph	when vertex.url is tab.url
+				if vertex.time > current_newest.time
+					current = vertex 
+			
+			CreateVector(current)
 
 	)
 
 
+CreateVector = (vertex) -> 
 
+	# create a 
+	
+
+window.BuildRectangle = (bottomTime, topTime, title, url) -> 
+
+	window.paper.circle(150, 150, 100)
 
 
 
