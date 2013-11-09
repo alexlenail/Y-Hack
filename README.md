@@ -7,3 +7,5 @@ http://net.tutsplus.com/tutorials/javascript-ajax/developing-google-chrome-exten
 http://developer.chrome.com/extensions/history.html
 
 http://developer.chrome.com/extensions/webNavigation.html
+
+[Nick Quinlan](https://github.com/nquinlan) is a beast

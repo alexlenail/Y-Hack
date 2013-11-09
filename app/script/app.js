@@ -5,24 +5,26 @@
   window.displayed = [];
 
   $(document).ready(function() {
-    return chrome.history.search({
-      text: ""
-    }, function(results) {
-      var result, _i, _len, _results;
-      _results = [];
-      for (_i = 0, _len = results.length; _i < _len; _i++) {
-        result = results[_i];
-        if (visible(result.id) || isOpen(result)) {
-          _results.push(chrome.history.getVisits({
-            'url': result.url
-          }, function(item) {
-            return window.display(result, item.id, item.referringVisitId);
-          }));
-        } else {
-          _results.push(void 0);
+    return chrome.history.search({}, function(results) {
+      return chrome.tabs.query({}, function(tabs) {
+        var index, tab, _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = tabs.length; _i < _len; _i++) {
+          tab = tabs[_i];
+          index = results.indexOf(tab.id);
+          if (index === -1) {
+            _results.push(console.log("FAILURE"));
+          } else {
+            window.display(results[index], tabs.id);
+            _results.push(chrome.history.getVisits({
+              'url': result.url
+            }, function(visits) {
+              return window.display(result, item.id, item.referringVisitId);
+            }));
+          }
         }
-      }
-      return _results;
+        return _results;
+      });
     });
   });
 

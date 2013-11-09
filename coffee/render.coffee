@@ -1,5 +1,4 @@
-
-snap = Snap(".layer")
+snap = Snap("#overlay")
 
 
 window.display = (HistoryItem, id, referrer) -> 
