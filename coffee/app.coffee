@@ -3,21 +3,36 @@ window.displayed = []
 
 $(document).ready -> 
 	
-	chrome.history.search( text: "", (results) ->    # results is an array of HistoryItems, See below
+	chrome.history.search({}, (results) ->    # results is an array of HistoryItems, See below
 
-		# display the tabs that are currently open
+		chrome.tabs.query({}, (tabs) ->
 
-		for result in results
+			for tab in tabs
 
-			if visible(result.id) or isOpen(result)
+				index = results.indexOf(tab.id)
+				result = results[index]
+				if index is -1
+					console.log "FAILURE"
+				else
+					window.display(result)
+					window.displayed.push(result.id)
 
-				chrome.history.getVisits( 'url': result.url, (item) ->   # item is a VisitItem. See below. 
-					
-					window.display(result, item.id, item.referringVisitId) 	
+					chrome.history.getVisits( 'url': result.url, (visits) ->   # item is a VisitItem. See below. 
 
-				)	
+						for visit in visits
+
+							if visit.id is 
+
+								referrer = results[]
+
+								window.display(result, item.id, item.referringVisitId) 	
+
+					)
+
+		)
 
 	)
+
 
 
 visible = (id) -> window.displayed.indexOf(id) isnt -1
