@@ -10,6 +10,8 @@ window.display = (HistoryItem, pointsTo) ->
 	$("#referrer").parent()
 
 
+  rect = snap.rect(0,0,50,50)
+
 	else
 		console.log "the id was #{id}"
 		console.log "the HistoryItem id was #{HistoryItem.id}"
