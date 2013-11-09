@@ -9,40 +9,39 @@ $(document).ready ->
 	overlay = $("#overlay")
 	canvas = Raphael(overlay.get(0))
 
-	graph = []
+	graph = {}
+	draw = (graph) ->
+		console.log "Draw the graph"
+		console.log graph
+
+	addVector = (graph) ->
+		console.log graph
+
+	initHistGraph = (history) ->
+
+		makeGraph = (visits, link) ->
+			for visit in visits
+				graph[visit.visitId] = {
+					url: link.url
+					title: link.title
+					time: link.lastVisitTime
+					parent: visit.referringVisitId
+					children: []
+				}
+
+		visit = () ->
+			for link in history
+				chrome.history.getVisits({'url': link.url}, (visits) ->
+					makeGraph(visits, link)
+				)
+		
+		visit()
+		console.log "end graph: "
+		console.log graph
+
 	chrome.history.search(all, (history) ->
-
-		for link in history
-			console.log "Visits"
-			chrome.history.getVisits({'url': link.url}, (visits) ->
-				console.log visits
-				for visit in visits
-					console.log visit.referringVisitId
-					graph[visit.visitId] = {
-						url: link.url
-						title: link.title
-						time: link.lastVisitTime
-						parent: visit.referringVisitId
-						children: []
-					}
-				console.log "after visit loop"
-				console.log graph
-
-				#Adding children to graph
-				for key, vertex of graph when vertex.parent != '0'
-					console.log vertex
-					graph[vertex.parent].children.push(vertex.id)
-
-				console.log "After graph push"
-				return graph
-
-			).then (graph) -> 
-				console.log graph
-				return graph
-
+		initHistGraph history
 	)
-
-
 
 	current = {time: 0}
 
