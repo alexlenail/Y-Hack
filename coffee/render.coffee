@@ -1,7 +1,7 @@
 snap = Snap("#overlay")
 
 
-window.display = (HistoryItem, id, referrer) -> 
+window.display = (HistoryItem) -> 
 
 	unless HistoryItem.id is id
 
