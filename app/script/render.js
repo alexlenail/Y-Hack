@@ -3,10 +3,16 @@
 
   window.display = function(HistoryItem, id, referrer) {
     if (HistoryItem.id !== id) {
-      return $("<div/>", {
+      $("<div/>", {
         "class": 'link',
         id: id
       });
+      return $("#referrer");
+    } else {
+      console.log("the id was " + id);
+      console.log("the HistoryItem id was " + HistoryItem.id);
+      console.log("so render failed");
+      return console.log("");
     }
   };
 
