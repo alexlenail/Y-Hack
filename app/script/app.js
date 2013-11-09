@@ -39,6 +39,7 @@
             if (vertex.url === tab.url) {
               if (vertex.time > current["time"]) {
                 current = vertex;
+                current.key = key;
               }
             }
           }
@@ -86,19 +87,19 @@
 
   window.CreateVector = function(vertex) {
     var $vector, left, recurse;
-    left = vectors.length * 220;
+    left = vectors.length * 212;
     $vector = $("<div/>", {
       "class": 'vector',
-      style: "left: " + left + "px; top: 0;"
+      style: "left: " + left + "px; top: 60px;"
     });
     $("#overlay").append($vector);
     recurse = function(vertex) {
-      var dest, _i, _len, _ref;
+      var child, _i, _len, _ref;
       $vector.append(BuildDiv(vertex.time, vertex.title, vertex.url));
       _ref = vertex.children;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        dest = _ref[_i];
-        buildArrow($vertex, $("#" + graph[dest]));
+        child = _ref[_i];
+        buildArrow($vertex, $("#" + graph[child]));
       }
       if ((graph[vertex.parent] != null) && vertex.parent !== '0') {
         return recurse(graph[vertex.parent]);

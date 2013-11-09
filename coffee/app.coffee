@@ -17,7 +17,8 @@ $(document).ready ->
 				current = {time: 0}
 				for key, vertex of graph when vertex.url is tab.url
 					if vertex.time > current["time"]
-						current = vertex 
+						current = vertex
+						current.key = key
 
 				CreateVector(current)
 		)
@@ -54,15 +55,14 @@ $(document).ready ->
 
 window.CreateVector = (vertex) -> 
 
-	
-	left = vectors.length * 220;
-	$vector = $("<div/>", class: 'vector', style:"left: "+left+"px; top: 0;")
+	left = vectors.length * 212;
+	$vector = $("<div/>", class: 'vector', style:"left: "+left+"px; top: 60px;")
 	$("#overlay").append($vector)
 	
 	recurse = (vertex) -> 
 
 		$vector.append(BuildDiv(vertex.time, vertex.title, vertex.url))
-		buildArrow($vertex, $("##{graph[dest]}")) for dest in vertex.children
+		buildArrow($vertex, $("##{graph[child]}")) for child in vertex.children
 		if graph[vertex.parent]? and vertex.parent isnt '0'
 			recurse(graph[vertex.parent])
 	
