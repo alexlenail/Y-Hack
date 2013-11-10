@@ -1,4 +1,3 @@
-
 We are building something...
 
 
@@ -9,3 +8,5 @@ http://developer.chrome.com/extensions/history.html
 http://developer.chrome.com/extensions/webNavigation.html
 
 [Nick Quinlan](https://github.com/nquinlan) is a beast
+
+http://embed.ly/docs/endpoints/1/preview
