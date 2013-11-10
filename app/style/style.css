@@ -3,6 +3,8 @@
 body {
 
 	height: 100%;
+        background-image:url('../imgs/triangular.png');
+        background-repeat:repeat;
 
 }
 
