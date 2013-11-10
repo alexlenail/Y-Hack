@@ -25,7 +25,7 @@
     $overlay = $("#overlay");
     overlay = Raphael($overlay.get(0));
     build = function(graph) {
-      var id, key, vertex, _results;
+      var id, key, vertex;
       for (id in graph) {
         vertex = graph[id];
         if ((graph["" + vertex.parent] != null) && vertex.parent !== '0') {
@@ -38,19 +38,8 @@
           maxTime = vertex.time;
         }
       }
-      /*
-      		var sortable = [];
-      		for vertex in Graph
-      			sortable.push([vehicle, maxSpeed[vehicle]])
-      		sortable.sort(function(a, b) {return a[1] - b[1]})
-      */
-
-      Object.keys(graph).sort(function(a, b) {
-        return -(graph[a].time - graph[b].time);
-      });
-      chrome.tabs.query({}, function(tabs) {
+      return chrome.tabs.query({}, function(tabs) {
         var current, tab, _i, _len, _results;
-        _results = [];
         for (_i = 0, _len = tabs.length; _i < _len; _i++) {
           tab = tabs[_i];
           current = {
@@ -67,21 +56,20 @@
             }
           }
           CreateVector(current, 60);
-          _results.push(alreadyDisplayed.push(current));
+          alreadyDisplayed.push(current);
+        }
+        console.log(alreadyDisplayed);
+        _results = [];
+        for (key in graph) {
+          vertex = graph[key];
+          if (!(!vertex.displayed && vertex.children.length === 0)) {
+            continue;
+          }
+          CreateVector(vertex);
+          _results.push(alreadyDisplayed.push(vertex));
         }
         return _results;
       });
-      console.log(graph);
-      _results = [];
-      for (key in graph) {
-        vertex = graph[key];
-        if (!(!vertex.displayed && vertex.children.length === 0 && !indexOf(vertex.visitId))) {
-          continue;
-        }
-        console.log(vertex);
-        _results.push(CreateVector(vertex));
-      }
-      return _results;
     };
     initialize = function(history) {
       var makeGraph, visit;
@@ -124,11 +112,9 @@
   window.CreateVector = function(vertex, top) {
     var $vector, left, recurse;
     left = vectors.length * 211;
-    console.log(top);
     if (top !== 60) {
       top = 60 + Math.pow(maxTime - vertex.time, 1 / 3);
     }
-    console.log(top);
     if ($(document).width() < left + 211) {
       $("header").width("" + (left + 211) + "px");
     } else {
@@ -140,7 +126,7 @@
     });
     $("#overlay").append($vector);
     recurse = function(vertex) {
-      var child, key, v, _i, _len, _ref;
+      var key, v;
       for (key in graph) {
         v = graph[key];
         if (v === vertex) {
@@ -151,15 +137,6 @@
         displayed: true
       });
       $vector.append(BuildDiv(vertex.time, vertex.title, vertex.url, vertex.id));
-      _ref = vertex.children;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        child = _ref[_i];
-        if (graph[child] != null) {
-          if (vertex.id != null) {
-            buildArrow(vertex.id, child, left);
-          }
-        }
-      }
       if ((graph[vertex.parent] != null) && vertex.parent !== '0') {
         return recurse(graph[vertex.parent]);
       }

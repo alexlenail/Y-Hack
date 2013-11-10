@@ -22,16 +22,9 @@ $(document).ready ->
 			if vertex.time > maxTime
 				maxTime = vertex.time
 
-		# Sort Graph by time
-		###
-		var sortable = [];
-		for vertex in Graph
-			sortable.push([vehicle, maxSpeed[vehicle]])
-		sortable.sort(function(a, b) {return a[1] - b[1]})
-		###
 
-		Object.keys(graph).sort((a, b) -> return - (graph[a].time - graph[b].time))
-		#console.log graph
+		# Sort by time
+		# Object.keys(graph).sort((a, b) -> return - (graph[a].time - graph[b].time))
 
 		# Creates Vector for most recent link of each tab
 		chrome.tabs.query({}, (tabs) -> 
@@ -46,13 +39,16 @@ $(document).ready ->
 
 				CreateVector(current, 60)
 				alreadyDisplayed.push(current)
+
+			# Create Vector for child-less and not-yet-displayed
+			console.log alreadyDisplayed
+			for key, vertex of graph when !vertex.displayed and vertex.children.length == 0
+				#results = $.grep(graph, (e) -> console.log e.url; return e.url == vertex.url) #TODO: change url to ID
+				#if results.length ==0
+					CreateVector(vertex)
+					alreadyDisplayed.push(vertex)
 		)
 
-		# Create Vector for child-less and not-yet-displayed
-		console.log graph
-		for key, vertex of graph when !vertex.displayed and vertex.children.length == 0 and !indexOf(vertex.visitId)
-			console.log vertex
-			CreateVector(vertex)
 
 	initialize = (history) ->
 		graph = {}
@@ -85,10 +81,8 @@ $(document).ready ->
 window.CreateVector = (vertex, top) -> 
 
 	left = vectors.length * 211;
-	console.log top
 	if top != 60
 		top  = 60 + Math.pow((maxTime - vertex.time), 1/3)
-	console.log top
 
 	if $(document).width() < left + 211 then $("header").width("#{left + 211}px") else $("header").width("100%")
 	
@@ -99,9 +93,9 @@ window.CreateVector = (vertex, top) ->
 		vertex.id = key for key, v of graph when v is vertex
 		displayed: true
 		$vector.append(BuildDiv(vertex.time, vertex.title, vertex.url, vertex.id))
-		for child in vertex.children when graph[child]?
-			if vertex.id?
-				buildArrow(vertex.id, child, left)
+		#for child in vertex.children when graph[child]?
+			#if vertex.id?
+				#buildArrow(vertex.id, child, left)
 
 		if graph[vertex.parent]? and vertex.parent isnt '0'
 			recurse(graph[vertex.parent])
